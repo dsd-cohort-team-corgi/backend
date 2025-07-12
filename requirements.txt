@@ -29,6 +29,8 @@ fastapi-cli==0.0.8
     # via fastapi
 fastapi-cloud-cli==0.1.2
     # via fastapi-cli
+greenlet==3.2.3
+    # via sqlmodel
 h11==0.16.0
     # via
     #   httpcore
@@ -54,6 +56,8 @@ markupsafe==3.0.2
     # via jinja2
 mdurl==0.1.2
     # via markdown-it-py
+psycopg2==2.9.10
+    # via sqlmodel
 pydantic==2.8.2
     # via
     #   team-corgi (pyproject.toml)
@@ -89,6 +93,10 @@ shellingham==1.5.4
     # via typer
 sniffio==1.3.1
     # via anyio
+sqlalchemy==2.0.41
+    # via sqlmodel
+sqlmodel==0.0.24
+    # via sqlmodel
 starlette==0.41.3
     # via fastapi
 typer==0.16.0
