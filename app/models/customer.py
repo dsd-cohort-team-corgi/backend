@@ -5,7 +5,6 @@ from sqlmodel import SQLModel, Field, Column, DateTime, text
 
 
 class CustomerBase(SQLModel):
-    email: str
     phone_number: Optional[str] = None
     first_name: str
     last_name: str
@@ -24,12 +23,10 @@ class Customer(CustomerBase, table=True):
 
 # Schema for create
 class CustomerCreate(SQLModel):
-    email: str
     phone_number: Optional[str] = None
     user_id: UUID
 
 
 # Schema for update
 class CustomerUpdate(SQLModel):
-    email: Optional[str] = None
     phone_number: Optional[str] = None

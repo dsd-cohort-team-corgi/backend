@@ -19,9 +19,9 @@ def seed_auth_users():
         )
         # if data exists remove the data
         # deletes from services as the key is tied to auth.users
-        if results:
-            session.exec(text("delete from services"))
-            session.exec(text("delete from auth.users"))
+        # if results:
+        #     session.exec(text("delete from services"))
+        #     session.exec(text("delete from auth.users"))
 
         # otherwise add new data into the database for auth users to set the user_id
         users_data = [
@@ -101,8 +101,23 @@ def seed_customers():
 
     with Session(engine) as session:
 
+        # Check if customers already exist
+        existing_customers = session.exec(text("SELECT COUNT(*) FROM customers")).first()
+        if existing_customers and existing_customers[0] > 0:
+            print("Customers already exist. Skipping customer seeding.")
+            return
+
         # Get user IDs from auth.users table
-        user_results = session.exec(text("SELECT id FROM auth.users limit 3"))
+        user_results = session.exec(
+            text(
+                """
+                    SELECT u.id FROM auth.users u 
+                    LEFT JOIN providers p ON u.id = p.user_id 
+                    WHERE p.user_id IS NULL 
+                    LIMIT 3
+                """
+            )
+        )
         user_ids = [row[0] for row in user_results]
 
         if not user_ids:
@@ -112,21 +127,21 @@ def seed_customers():
         # Create customers data using the user IDs
         customers_data = [
             {
-                "email": "olivia.martin@example.com",
+                # "email": "olivia.martin@example.com",
                 "phone_number": "+1-555-101-1234",
                 "first_name": "Olivia",
                 "last_name": "Martin",
                 "user_id": user_ids[0] if len(user_ids) > 0 else None,
             },
             {
-                "email": "bob.johnson@example.com",
+                # "email": "bob.johnson@example.com",
                 "phone_number": "+1-555-102-2345",
                 "user_id": user_ids[1] if len(user_ids) > 1 else None,
                 "first_name": "Bob",
                 "last_name": "Johnson",
             },
             {
-                "email": "liam.james@example.com",
+                # "email": "liam.james@example.com",
                 "phone_number": "+1-555-103-3456",
                 "user_id": user_ids[2] if len(user_ids) > 2 else None,
                 "first_name": "Liam",
@@ -141,8 +156,24 @@ def seed_customers():
 def seed_providers():
     with Session(engine) as session:
 
+        # Check if providers already exist
+        existing_providers = session.exec(text("SELECT COUNT(*) FROM providers")).first()
+        if existing_providers and existing_providers[0] > 0:
+            print("providers  already exist. Skipping providers list.")
+            return
+
         # Get user IDs from auth.users table
-        user_results = session.exec(text("SELECT id FROM auth.users offset 3 limit 4"))
+
+        user_results = session.exec(
+            text(
+                """
+                    SELECT u.id FROM auth.users u 
+                    LEFT JOIN providers p ON u.id = p.user_id 
+                    WHERE p.user_id IS NULL 
+                    offset 3 LIMIT 4
+                """
+            )
+        )
         user_ids = [row[0] for row in user_results]
 
         if not user_ids:
@@ -154,12 +185,12 @@ def seed_providers():
             {
                 "phone_number": "+1-555-101-1234",
                 "user_id": user_ids[0] if len(user_ids) > 0 else None,
-                "email": "sophia.davis@example.com",
+                # "email": "sophia.davis@example.com",
                 "first_name": "Sophia",
                 "last_name": "Davis",
             },
             {
-                "email": "noah.brown@example.com",
+                # "email": "noah.brown@example.com",
                 "user_id": user_ids[1] if len(user_ids) > 1 else None,
                 "phone_number": "+1-555-105-5678",
                 "first_name": "Noah",
@@ -167,14 +198,14 @@ def seed_providers():
             },
             {
                 "user_id": user_ids[2] if len(user_ids) > 2 else None,
-                "email": "emma.wilson@example.com",
+                # "email": "emma.wilson@example.com",
                 "phone_number": "+1-555-106-6789",
                 "first_name": "Emma",
                 "last_name": "Wilson",
             },
             {
                 "user_id": user_ids[3] if len(user_ids) > 3 else None,
-                "email": "jack.thomas@example.com",
+                # "email": "jack.thomas@example.com",
                 "phone_number": "+1-555-107-7890",
                 "first_name": "Jack",
                 "last_name": "Thomas",
@@ -188,10 +219,15 @@ def seed_providers():
 def seed_services():
     with Session(engine) as session:
 
+        # Check if services already exist
+        existing_services = session.exec(text("SELECT COUNT(*) FROM services")).first()
+        if existing_services and existing_services[0] > 0:
+            print("services  already exist. Skipping providers list.")
+            return
+
         # Get user IDs from auth.users table
         provider_results = session.exec(text("SELECT id FROM providers"))
         # for user in user_results:
-        #     print("USERS ARE!!", user)
         provider_ids = [row[0] for row in provider_results]
 
         if not provider_ids:

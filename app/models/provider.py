@@ -5,7 +5,6 @@ from sqlmodel import SQLModel, Field, Column, DateTime, text
 
 
 class ProviderBase(SQLModel):
-    email: str
     phone_number: Optional[str] = None
     first_name: str
     last_name: str
@@ -30,12 +29,10 @@ class Provider(ProviderBase, table=True):
 
 # Schema for create
 class ProviderCreate(SQLModel):
-    email: str
     phone_number: Optional[str] = None
     user_id: UUID
 
 
 # Schema for update
 class ProviderUpdate(SQLModel):
-    email: Optional[str] = None
     phone_number: Optional[str] = None
