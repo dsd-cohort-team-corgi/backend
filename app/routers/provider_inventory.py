@@ -1,15 +1,16 @@
-# app/routers/provider_inventory.py
-
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 
 from app.db.session import get_session
+from app.models.provider import Provider
 from app.models.provider_inventory import (
     ProviderInventory,
     ProviderInventoryCreate,
     ProviderInventoryUpdate
 )
+from app.utils.auth import get_current_user_id
+from app.utils.user_helpers import get_user_scoped_record
 
 router = APIRouter(
     prefix="/provider_inventory",
@@ -19,9 +20,20 @@ router = APIRouter(
 @router.post("/", response_model=ProviderInventory)
 def create_provider_inventory(
         inventory_data: ProviderInventoryCreate,
+        supabase_user_id: UUID = Depends(get_current_user_id),
         session: Session = Depends(get_session)
 ):
-    provider_inventory = ProviderInventory(**inventory_data.dict())
+    # Make sure the user has a provider profile
+    db_provider = get_user_scoped_record(session, Provider, supabase_user_id)
+    if not db_provider:
+        raise HTTPException(status_code=400, detail="No provider profile found for user")
+
+    # Create the provider's inventory
+    provider_inventory = ProviderInventory(
+        **inventory_data.model_dump(),
+        supabase_user_id = supabase_user_id,
+        provider_id = db_provider.id,
+    )
     session.add(provider_inventory)
     session.commit()
     session.refresh(provider_inventory)
