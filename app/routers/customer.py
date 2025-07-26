@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
 from app.db.session import get_session
-from app.models.customer import Customer, CustomerCreate, CustomerUpdate, CustomerRead
+from app.models.customer import Customer, CustomerCreate, CustomerUpdate
 from app.utils.auth import get_current_user_id
 from app.utils.crud_helpers import create_one, delete_one, update_one, get_all
 from app.utils.user_helpers import get_user_scoped_record
@@ -47,7 +47,7 @@ async def read_own_customer(
     return db_customer
 
 # Used to test customer relationships
-@router.get("/all", response_model=list[CustomerRead])
+@router.get("/all", response_model=list[Customer])
 async def read_all_customers(
     session: Session = Depends(get_session)
 ):
