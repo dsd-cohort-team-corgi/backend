@@ -1,17 +1,28 @@
 # 🧼 Welcome to Wipe Right – Backend (FastAPI)
 
-This is the backend API for the Wipe Right project, built with **FastAPI**, **SQLModel**, and **Supabase**. It supports customer and provider accounts, service listings, bookings, and more.
+This is the backend API for the Wipe Right project, built with **FastAPI**, **SQLModel**, and **Supabase**. It supports
+customer and provider accounts, service listings, bookings, and more.
 
 ![Corgi Butt](app/img/b1.png)
 
 ---
 
+## 👥 Contributors
+
+- **Thomas Nguyen** – Project Lead & Frontend Lead (UX/UI design, guided scope, coordination, light backend
+  contributions)
+- **Lisa Chen** – Backend Developer (Supabase Auth and Google Auth integration, CRUD APIs, Stripe integration, linting &
+  code style enforcement, AI integration, logging, project scaffolding)
+  scaffolding)
+- **Nicole Magallanes** – Backend Developer (models, relationships, testing, docs)
+- **Luis Arevalo** – Backend Developer (CRUD APIs, debugging, setup support)
+
 ## 📚 Table of Contents
 
 - [⚡ Quickstart](#-quickstart)
 - [🆕 First-Time Setup](#-first-time-setup)
-  - [📦 Install Dependencies](#-install-dependencies)
-  - [🔐 Configure Environment Variables](#-configure-environment-variables)
+    - [📦 Install Dependencies](#-install-dependencies)
+    - [🔐 Configure Environment Variables](#-configure-environment-variables)
 - [🧰 Prerequisites & Tooling](#-prerequisites--tooling)
 - [▶️ Run the Server](#-run-the-server)
 - [📚 API Docs](#-api-docs)
@@ -22,6 +33,7 @@ This is the backend API for the Wipe Right project, built with **FastAPI**, **SQ
 ---
 
 ## ⚡ Quickstart
+
 Already cloned the repo and set up your `.env`?
 
 Just run:
@@ -30,6 +42,7 @@ Just run:
 uv sync
 make run
 ```
+
 Or if `make` is not installed:
 ```uv run uvicorn app.main:app --reload```
 
@@ -50,21 +63,21 @@ uv sync                  # Install dependencies from requirements.txt
 cp .env_example .env     # Create your .env file (configure it in the next step)
 make run                 # Start the FastAPI dev server
 ```
+
 Or if `make` is not installed:
 ```uv run uvicorn app.main:app --reload```
 
 > This will automatically create a `.venv` if one doesn't already exist.
-
 
 ### 🔐 Configure Environment Variables
 
 We use a `.env` file to manage secrets and environment-specific settings.
 
 1. Go to **Supabase → Database → Connect**
-   - ![Supabase Database Connect](app/img/supabase_database_connect.png)
+    - ![Supabase Database Connect](app/img/supabase_database_connect.png)
 
 2. In the modal that appears, look for the **Direct Connection** section.
-   - ![Supabase API Token](app/img/supabase_api_token_temp.png)
+    - ![Supabase API Token](app/img/supabase_api_token_temp.png)
 
 3. Copy the example `.env` file to get started:
 
@@ -78,6 +91,7 @@ We use a `.env` file to manage secrets and environment-specific settings.
   ```
 
 4. Open `.env` in your editor and replace the placeholder values with your own:
+
 * `DATABASE_URL`: Use the credentials from the Transaction Pooler section
 * `SUPABASE_URL`: Your Supabase project URL
 * `SUPABASE_PUBLISHABLE_KEY` and `SUPABASE_SECRET_KEY`: Found in Supabase → Project Settings → API
@@ -92,13 +106,14 @@ This project assumes you're using **VS Code** as your editor.
 
 ### ✅ Required Tools
 
-| Tool         | Purpose                         | Install Command / Link |
-|--------------|----------------------------------|-------------------------|
-| [`uv`](https://github.com/astral-sh/uv)         | Python runtime + package manager | **Mac/Linux:**<br>`curl -Ls https://astral.sh/uv/install.sh \| bash`<br>**Windows (PowerShell):**<br>`irm https://astral.sh/uv/install.ps1 \| iex` |
-| `make`       | Task runner for common scripts   | **Mac/Linux/WSL/Git Bash:** Already installed<br>**Windows (CMD/Powershell):*** `choco install make`<br>✅ To confirm `make` is installed, run: <br>`make --version`|
-| `.env` file  | Local env variables              | Copy `.env_example` to `.env` and configure manually |
+| Tool                                    | Purpose                          | Install Command / Link                                                                                                                                              |
+|-----------------------------------------|----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [`uv`](https://github.com/astral-sh/uv) | Python runtime + package manager | **Mac/Linux:**<br>`curl -Ls https://astral.sh/uv/install.sh \| bash`<br>**Windows (PowerShell):**<br>`irm https://astral.sh/uv/install.ps1 \| iex`                  |
+| `make`                                  | Task runner for common scripts   | **Mac/Linux/WSL/Git Bash:** Already installed<br>**Windows (CMD/Powershell):*** `choco install make`<br>✅ To confirm `make` is installed, run: <br>`make --version` |
+| `.env` file                             | Local env variables              | Copy `.env_example` to `.env` and configure manually                                                                                                                |
 
-> * _Note: You only need `make` installed to run project commands. The VSCode Makefile extension is optional and not required._
+> * _Note: You only need `make` installed to run project commands. The VSCode Makefile extension is optional and not
+    required._
 ---
 
 ### 💻 VS Code Extensions (Optional, but Recommended)
@@ -128,10 +143,10 @@ make run
 ```
 
 **🛠️ Without Make**
+
 ```
 uv run uvicorn app.main:app --reload
 ```
-
 
 > **This will start the server on http://127.0.0.1:8000**
 >
@@ -145,7 +160,6 @@ You can now build and test your FastAPI backend locally. Happy coding!
 
 ![Corgi Butt2](app/img/b2.png)
 ---
-
 
 ## 📚 API Docs
 
@@ -177,13 +191,15 @@ GET /inventory_items
 
 We use **Supabase Auth** to manage user authentication for both customers and providers.
 
-When a user logs in (e.g. via Google), Supabase issues a **JWT (JSON Web Token)**. This token is passed in the `Authorization` header on each request:
+When a user logs in (e.g. via Google), Supabase issues a **JWT (JSON Web Token)**. This token is passed in the
+`Authorization` header on each request:
 
 ```
 Authorization: Bearer <JWT_TOKEN>
 ```
 
 **The FastAPI backend:**
+
 - Validates this token using Supabase’s public signing key
 - Extracts the authenticated user’s ID
 - Scopes data access based on that user ID
@@ -201,6 +217,7 @@ SUPABASE_URL=https://<your-project>.supabase.co
 SUPABASE_PUBLISHABLE_KEY=sb-publishable-key-goes-here
 SUPABASE_SECRET_KEY=sb-secret-key-goes-here
 ```
+
 You can find these values in your Supabase project under `Settings` → `API`.
 
 ---
@@ -214,17 +231,16 @@ This project uses:
 ✅ Pre-commit and GitHub Actions automatically enforce linting and formatting.
 
 | Tool           | Runs When                    | Purpose                                    |
-| -------------- | ---------------------------- | ------------------------------------------ |
+|----------------|------------------------------|--------------------------------------------|
 | `pre-commit`   | Before each commit (locally) | Auto-format staged changes                 |
 | GitHub Actions | On every push                | Validates formatting and lints entire repo |
 
-
 ### 🔧 Common Commands
 
-| Task            | Makefile Command      | Direct Command |
-|-----------------|------------------------|----------------|
-| Format code     | `make format-all`      | `ruff format . && ruff check . --fix` |
-| Lint code       | `make lint-all`        | `uv run ruff check .` |
+| Task        | Makefile Command  | Direct Command                        |
+|-------------|-------------------|---------------------------------------|
+| Format code | `make format-all` | `ruff format . && ruff check . --fix` |
+| Lint code   | `make lint-all`   | `uv run ruff check .`                 |
 
 ### 🎯 Target a specific file or folder:
 
@@ -247,6 +263,7 @@ We use [`uv`](https://github.com/astral-sh/uv) to manage dependencies and virtua
 ```bash
 uv add package-name
 ```
+
 This will install the package and update both `requirements.txt` and `uv.lock`.
 
 ### Remove a dependency
@@ -256,6 +273,7 @@ uv pip uninstall package-name   # removes the installed package from your enviro
 uv remove package-name          # removes it from the lockfile and requirements
 uv sync                         # final cleanup to sync everything
 ```
+
 > Always run `uv sync` after modifying dependencies to ensure your environment stays in sync with the lockfile.
 ---
 
@@ -278,7 +296,8 @@ psycopg2.OperationalError: could not translate host name ...
 ### 🛠 Other Tips
 
 - ❌ `make: command not found`
-  → Run `make --version` to confirm it's installed. On Windows, use **Git Bash**, **WSL**, or install `make` with Chocolatey (`choco install make` as Administrator).
+  → Run `make --version` to confirm it's installed. On Windows, use **Git Bash**, **WSL**, or install `make` with
+  Chocolatey (`choco install make` as Administrator).
 
 - ❌ `ModuleNotFoundError`
   → Make sure you've run `uv sync` and you're in the right virtual environment (`.venv`).
