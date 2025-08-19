@@ -13,7 +13,6 @@ customer and provider accounts, service listings, bookings, and more.
   contributions)
 - **Lisa Chen** – Backend Developer (Supabase Auth and Google Auth integration, CRUD APIs, Stripe integration, linting &
   code style enforcement, AI integration, logging, project scaffolding)
-  scaffolding)
 - **Nicole Magallanes** – Backend Developer  (models, CRUD APIs, relationships, Geolocation API)
 - **Luis Arevalo** – Backend Developer (CRUD APIs, debugging, setup support)
 
